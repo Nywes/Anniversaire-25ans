@@ -1,26 +1,7 @@
-/**
- * Accès aux données. Deux implémentations derrière la même API :
- *  - Supabase dès que VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY sont définies ;
- *  - localStorage sinon, pour pouvoir développer et montrer le site avant
- *    d'avoir créé le projet Supabase.
- */
+/** Accès aux données. Tout passe par Supabase. */
 import { supabase } from './supabase'
 import type { Rsvp, SavedTrack, DrinkId, Attending, SleepGearId } from './types'
 import type { Track } from './itunes'
-
-const LS_RSVPS = 'anniv:rsvps'
-const LS_TRACKS = 'anniv:tracks'
-
-const readLs = <T,>(key: string, fallback: T): T => {
-  try {
-    const raw = localStorage.getItem(key)
-    return raw ? (JSON.parse(raw) as T) : fallback
-  } catch {
-    return fallback
-  }
-}
-const writeLs = (key: string, value: unknown) =>
-  localStorage.setItem(key, JSON.stringify(value))
 
 /* ------------------------------------------------------------------ RSVP -- */
 
@@ -68,21 +49,12 @@ const toRow = (r: Rsvp): RsvpRow => ({
 })
 
 export async function loadRsvp(slug: string): Promise<Rsvp | null> {
-  if (!supabase) {
-    return readLs<Record<string, Rsvp>>(LS_RSVPS, {})[slug] ?? null
-  }
   const { data, error } = await supabase.from('rsvps').select('*').eq('slug', slug).maybeSingle()
   if (error) throw error
   return data ? toRsvp(data as RsvpRow) : null
 }
 
 export async function saveRsvp(rsvp: Rsvp): Promise<void> {
-  if (!supabase) {
-    const all = readLs<Record<string, Rsvp>>(LS_RSVPS, {})
-    all[rsvp.slug] = rsvp
-    writeLs(LS_RSVPS, all)
-    return
-  }
   const { error } = await supabase
     .from('rsvps')
     .upsert({ ...toRow(rsvp), updated_at: new Date().toISOString() }, { onConflict: 'slug' })
@@ -90,9 +62,6 @@ export async function saveRsvp(rsvp: Rsvp): Promise<void> {
 }
 
 export async function loadAllRsvps(): Promise<Rsvp[]> {
-  if (!supabase) {
-    return Object.values(readLs<Record<string, Rsvp>>(LS_RSVPS, {}))
-  }
   const { data, error } = await supabase.from('rsvps').select('*')
   if (error) throw error
   return (data as RsvpRow[]).map(toRsvp)
@@ -100,11 +69,6 @@ export async function loadAllRsvps(): Promise<Rsvp[]> {
 
 /** Slugs des gens qui ont dit oui — sert à allumer les cases du plateau. */
 export async function loadConfirmedSlugs(): Promise<string[]> {
-  if (!supabase) {
-    return Object.values(readLs<Record<string, Rsvp>>(LS_RSVPS, {}))
-      .filter((r) => r.attending === 'oui')
-      .map((r) => r.slug)
-  }
   const { data, error } = await supabase.from('rsvps').select('slug').eq('attending', 'oui')
   if (error) throw error
   return (data as { slug: string }[]).map((r) => r.slug)
@@ -137,7 +101,6 @@ const toTrack = (r: TrackRow): SavedTrack => ({
 })
 
 export async function loadTracks(): Promise<SavedTrack[]> {
-  if (!supabase) return readLs<SavedTrack[]>(LS_TRACKS, [])
   const { data, error } = await supabase
     .from('tracks')
     .select('*')
@@ -151,28 +114,20 @@ export async function addTrack(
   guestName: string,
   track: Track,
 ): Promise<SavedTrack> {
-  const row = {
-    guest_slug: guestSlug,
-    guest_name: guestName,
-    track_id: track.trackId,
-    title: track.title,
-    artist: track.artist,
-    artwork: track.artwork,
-    preview_url: track.previewUrl,
-    apple_url: track.appleUrl,
-  }
-
-  if (!supabase) {
-    const all = readLs<SavedTrack[]>(LS_TRACKS, [])
-    const clash = all.find((t) => t.trackId === track.trackId)
-    if (clash) throw new Error(`DUPLICATE:${clash.guestName}`)
-    const saved: SavedTrack = { ...toTrack({ ...row, id: crypto.randomUUID() } as TrackRow) }
-    all.push(saved)
-    writeLs(LS_TRACKS, all)
-    return saved
-  }
-
-  const { data, error } = await supabase.from('tracks').insert(row).select().single()
+  const { data, error } = await supabase
+    .from('tracks')
+    .insert({
+      guest_slug: guestSlug,
+      guest_name: guestName,
+      track_id: track.trackId,
+      title: track.title,
+      artist: track.artist,
+      artwork: track.artwork,
+      preview_url: track.previewUrl,
+      apple_url: track.appleUrl,
+    })
+    .select()
+    .single()
 
   // 23505 = violation de contrainte unique : quelqu'un a déjà proposé ce
   // morceau. On va chercher qui, pour pouvoir le dire plutôt que de laisser
@@ -191,13 +146,6 @@ export async function addTrack(
 }
 
 export async function removeTrack(id: string): Promise<void> {
-  if (!supabase) {
-    writeLs(
-      LS_TRACKS,
-      readLs<SavedTrack[]>(LS_TRACKS, []).filter((t) => t.id !== id),
-    )
-    return
-  }
   const { error } = await supabase.from('tracks').delete().eq('id', id)
   if (error) throw error
 }

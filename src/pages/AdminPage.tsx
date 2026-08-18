@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { loadAllRsvps, loadTracks } from '../lib/store'
 import { DRINKS, SLEEP_GEAR, type Rsvp, type SavedTrack } from '../lib/types'
 import { EVENT } from '../config/event'
@@ -18,7 +17,7 @@ const ATTENDING = {
 /** Les « oui » d'abord : c'est la liste qu'on relit le plus souvent. */
 const RANK = { oui: 0, 'peut-etre': 1, non: 2 } as const
 
-type Bit = { text: string; kind?: 'bed' | 'veg' }
+type Bit = { text: string }
 
 /** Résume une réponse en pastilles, dans l'ordre d'utilité. */
 function details(r: Rsvp): Bit[] {
@@ -28,10 +27,10 @@ function details(r: Rsvp): Bit[] {
 
   if (r.sleepover) {
     const gear = SLEEP_GEAR.find((g) => g.id === r.sleepGear)?.label
-    bits.push({ text: gear ? `Dort là · ${gear.toLowerCase()}` : 'Dort là', kind: 'bed' })
+    bits.push({ text: gear ? `Dort là · ${gear.toLowerCase()}` : 'Dort là' })
   }
 
-  if (r.vegetarian) bits.push({ text: 'Végétarien', kind: 'veg' })
+  if (r.vegetarian) bits.push({ text: 'Végétarien' })
 
   if (r.drinksAlcohol === false) bits.push({ text: 'Sans alcool' })
   else {
@@ -91,7 +90,6 @@ export default function AdminPage() {
       answered,
       silent,
       stats: {
-        heads: yes.length + yes.filter((r) => r.plusOne === true).length,
         yes: yes.length,
         maybe: rsvps.filter((r) => r.attending === 'peut-etre').length,
         no: rsvps.filter((r) => r.attending === 'non').length,
@@ -147,18 +145,11 @@ export default function AdminPage() {
 
   return (
     <main className="page">
-      <Link className="back" to="/">
-        le plateau
-      </Link>
       <h1 className="section-title" style={{ fontSize: 26, marginBottom: 14 }}>
         Tableau de bord
       </h1>
 
       <div className="mini-stats">
-        <div>
-          <b>{stats.heads}</b>
-          <small>à table</small>
-        </div>
         <div>
           <b className="t-ok">{stats.yes}</b>
           <small>oui</small>
@@ -204,7 +195,7 @@ export default function AdminPage() {
               {bits.length > 0 && (
                 <div className="answer-bits">
                   {bits.map((b) => (
-                    <span className={`bit${b.kind ? ` bit--${b.kind}` : ''}`} key={b.text}>
+                    <span className="bit" key={b.text}>
                       {b.text}
                     </span>
                   ))}

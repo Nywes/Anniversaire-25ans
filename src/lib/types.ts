@@ -14,6 +14,7 @@ export type DrinkId = (typeof DRINKS)[number]['id']
 export const SLEEP_GEAR = [
   { id: 'matelas', label: 'Mon matelas' },
   { id: 'voiture', label: 'Ma voiture' },
+  { id: 'lit', label: 'Un lit svp' },
   { id: 'rien', label: 'Rien du tout' },
 ] as const
 

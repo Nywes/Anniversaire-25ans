@@ -24,16 +24,35 @@ export type Guest = {
 }
 
 /** Doit rester synchronisé avec les --c1…--cN de index.css. */
-const PALETTE = 12
+const PALETTE = 20
 
 /**
- * Un pas de 5 sur une palette de 12 : 5 et 12 étant premiers entre eux, on
- * parcourt les douze couleurs avant d'en réutiliser une seule. Tirer la couleur
- * d'un hachage du prénom, comme on le faisait, donnait des paquets — la moitié
- * de la palette ne sortait jamais et le vert citron revenait cinq fois.
- * Le pas fait aussi sauter d'un bout à l'autre de la palette entre deux voisins.
+ * La palette est battue une fois pour toutes, puis distribuée dans l'ordre.
+ *
+ * Le mélange est *seedé* : il produit un ordre d'apparence aléatoire mais
+ * rigoureusement identique à chaque chargement et pour tout le monde — deux
+ * invités qui comparent leurs écrans voient les mêmes couleurs. Un vrai
+ * Math.random() donnerait des couleurs différentes à chaque visite, et tirer
+ * la teinte d'un hachage du prénom, comme on l'a essayé, forme des paquets :
+ * la moitié de la palette ne sort jamais.
  */
-const tintAt = (i: number) => `var(--c${((i * 5) % PALETTE) + 1})`
+const shuffledPalette = (() => {
+  const a = Array.from({ length: PALETTE }, (_, i) => i + 1)
+  let seed = 0x9e3779b1
+  const rand = () => {
+    seed ^= seed << 13
+    seed ^= seed >>> 17
+    seed ^= seed << 5
+    return (seed >>> 0) / 4294967296
+  }
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+})()
+
+const tintAt = (i: number) => `var(--c${shuffledPalette[i % PALETTE]})`
 
 export const GUESTS: Guest[] = AVATARS.filter((a) => !HIDDEN.includes(a.slug))
   .map((a) => ({

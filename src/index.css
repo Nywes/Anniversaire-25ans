@@ -11,8 +11,10 @@
   --paper: #fff8f0;
   --muted: #a9a3c9;
 
-  /* Palette des cases. Elles sont tirées au sort par slug (src/lib/blob.ts),
-     donc en ajouter une suffit à diversifier tout le plateau. */
+  /* Palette des cases : 20 teintes vives dans le même registre. Le tirage est
+     fait une fois pour toutes dans src/data/guests.ts — en ajouter une ici
+     suffit à diversifier tout le plateau, il faut juste penser à monter
+     PALETTE du même nombre. */
   --c1: #ff5a5f;
   --c2: #ffc93c;
   --c3: #2ec4b6;
@@ -25,6 +27,14 @@
   --c10: #c15cff;
   --c11: #ffe066;
   --c12: #4ade80;
+  --c13: #ff4d8d;
+  --c14: #7c5cff;
+  --c15: #24d6a4;
+  --c16: #ffa8c5;
+  --c17: #ff6b3d;
+  --c18: #35b0ff;
+  --c19: #d4ff4d;
+  --c20: #a06bff;
 
   /* Le plastique du plateau. */
   --tray: #e8443a;
@@ -617,8 +627,14 @@ p {
   height: 170px;
   margin-top: 14px;
   overflow: hidden;
-  border-radius: 30px 10px 26px 12px;
   background: var(--ink-3);
+  /* Même silhouette sans ligne droite que les blocs. */
+  -webkit-mask-image: var(--blob-b);
+  mask-image: var(--blob-b);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 /* Les tuiles OSM sont très claires : on les fond dans la palette du site. */
@@ -785,22 +801,21 @@ p {
   border-radius: 8px 22px 10px 20px;
 }
 
+/* Retour : une pastille organique plutôt qu'un lien texte. */
 .back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 16px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--muted);
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 14px;
+  color: var(--paper);
+  background: var(--ink-2);
+  border-radius: 58% 42% 45% 55% / 50% 55% 45% 50%;
   text-decoration: none;
+  transition: transform 0.2s var(--ease);
 }
-.back::before {
-  content: '';
-  width: 14px;
-  height: 2px;
-  background: currentColor;
-  border-radius: 2px;
+.back:active {
+  transform: scale(0.92);
 }
 
 /* Adresse copiable : c'est un bouton, mais il doit se lire comme du texte. */
@@ -875,7 +890,7 @@ p {
    des réponses en dessous. */
 .mini-stats {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 5px;
   margin-bottom: 12px;
 }
@@ -985,9 +1000,7 @@ p {
   border-radius: 999px;
   white-space: nowrap;
 }
-/* Les deux qui engagent des achats ou du matériel ressortent. */
-.bit--bed { background: #33456e; }
-.bit--veg { background: #1f5a4e; }
+
 /* Les allergies ressortent : c'est la seule ligne qui peut gâcher la soirée. */
 .answer-diet {
   margin-top: 4px;

@@ -4,7 +4,6 @@ import { GUESTS } from '../data/guests'
 import { blobStyle } from '../lib/blob'
 import { loadConfirmedSlugs } from '../lib/store'
 import { setHandoff } from '../lib/transition'
-import { isLive } from '../lib/supabase'
 import { EVENT } from '../config/event'
 
 const ORDER_KEY = 'anniv:order'
@@ -79,12 +78,6 @@ export default function BoardPage() {
 
   return (
     <main className="page page--board">
-      {!isLive && (
-        <div className={`banner${leaving ? ' is-gone' : ''}`}>
-          <b>Mode démo.</b> Supabase n'est pas encore branché : les réponses ne
-          sont enregistrées que dans ce navigateur.
-        </div>
-      )}
 
       <header className={`board-head${leaving ? ' is-gone' : ''}`}>
         <h1 className="display">

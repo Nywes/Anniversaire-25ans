@@ -128,7 +128,7 @@ export default function GuestPage() {
       <main className="page">
         <p className="lead">Cette page n'existe pas.</p>
         <Link className="link-btn" to="/">
-          Retour au plateau
+          <Icon name="back" size={16} /> Retour au plateau
         </Link>
       </main>
     )
@@ -237,8 +237,8 @@ export default function GuestPage() {
 
   return (
     <main className="page">
-      <Link className="back" to="/">
-        le plateau
+      <Link className="back" to="/" aria-label="Retour au plateau">
+        <Icon name="back" size={20} />
       </Link>
 
       <header className="guest-head">
@@ -260,6 +260,37 @@ export default function GuestPage() {
           />
         </div>
       )}
+
+      <div className="card">
+        <h2 className="section-title">{EVENT.when}</h2>
+        <button className="address" onClick={copyAddress}>
+          {EVENT.place.name} - {EVENT.place.address.toUpperCase()}
+          {EVENT.place.directions && (
+            <>
+              <br />
+              {EVENT.place.directions}
+            </>
+          )}
+          {copied && <span className="address-hint">Adresse copiée</span>}
+        </button>
+
+        <Map />
+
+        <div className="btn-row">
+          <a className="link-btn" href={mapsUrl()} target="_blank" rel="noreferrer">
+            <Icon name="route" /> Comment y aller
+          </a>
+          <button className="link-btn" onClick={downloadIcs}>
+            <Icon name="calendar" /> Ajouter à l'agenda
+          </button>
+        </div>
+
+        {EVENT.dressCode && (
+          <p className="hint" style={{ marginTop: 14 }}>
+            <b>Dress code :</b> {EVENT.dressCode}
+          </p>
+        )}
+      </div>
 
       <div className="card">
         <h2 className="section-title">Tu viens ?</h2>
@@ -286,39 +317,6 @@ export default function GuestPage() {
             Je peux pas
           </button>
         </div>
-      </div>
-
-      <div className="card">
-        <h2 className="section-title">{EVENT.when}</h2>
-        <button className="address" onClick={copyAddress}>
-          {EVENT.place.name}
-          <br />
-          {EVENT.place.address}
-          {EVENT.place.directions && (
-            <>
-              <br />
-              {EVENT.place.directions}
-            </>
-          )}
-          <span className="address-hint">{copied ? 'Adresse copiée' : 'Appuyer pour copier'}</span>
-        </button>
-
-        <Map />
-
-        <div className="btn-row">
-          <a className="link-btn" href={mapsUrl()} target="_blank" rel="noreferrer">
-            <Icon name="route" /> Comment y aller
-          </a>
-          <button className="link-btn" onClick={downloadIcs}>
-            <Icon name="calendar" /> Ajouter à l'agenda
-          </button>
-        </div>
-
-        {EVENT.dressCode && (
-          <p className="hint" style={{ marginTop: 14 }}>
-            <b>Dress code :</b> {EVENT.dressCode}
-          </p>
-        )}
       </div>
 
       <Reveal open={comingIsh}>

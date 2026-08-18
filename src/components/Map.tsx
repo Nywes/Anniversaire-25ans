@@ -8,10 +8,10 @@ import { EVENT, mapsUrl } from '../config/event'
  * partout, ça se style librement et il n'y a aucune clé d'API à gérer.
  */
 
-/** Niveau de zoom : bas volontairement, la carte sert à situer Chiché dans la
- *  région, pas à trouver la porte d'entrée. Le bouton « Comment y aller » prend
- *  le relais pour l'itinéraire précis. */
-const Z = 8
+/** Niveau de zoom très bas : la carte sert à situer Chiché dans la France, pas
+ *  à trouver la porte d'entrée. Le bouton « Comment y aller » prend le relais
+ *  pour l'itinéraire précis. */
+const Z = 5
 const TILE = 256
 
 const lonToTile = (lon: number) => ((lon + 180) / 360) * 2 ** Z
