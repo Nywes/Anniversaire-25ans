@@ -1,0 +1,4 @@
+# Netlify : renvoyer toutes les routes vers l'app React.
+# Sans ça, ouvrir /moi/camille directement (le lien qu'on envoie aux invités)
+# renvoie une 404. L'équivalent pour Vercel est dans vercel.json.
+/*  /index.html  200

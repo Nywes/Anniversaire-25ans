@@ -1,0 +1,1048 @@
+/* ==========================================================================
+   Anniversaire Eliott — feuille de style unique.
+   Pensé mobile d'abord : tout est dimensionné pour un écran de téléphone,
+   les media queries n'élargissent qu'au-delà.
+   ========================================================================== */
+
+:root {
+  --ink: #151329;
+  --ink-2: #201d40;
+  --ink-3: #2c2857;
+  --paper: #fff8f0;
+  --muted: #a9a3c9;
+
+  /* Palette des cases. Elles sont tirées au sort par slug (src/lib/blob.ts),
+     donc en ajouter une suffit à diversifier tout le plateau. */
+  --c1: #ff5a5f;
+  --c2: #ffc93c;
+  --c3: #2ec4b6;
+  --c4: #5878ff;
+  --c5: #9b5de5;
+  --c6: #ff7bac;
+  --c7: #b8e62d;
+  --c8: #ff8a3d;
+  --c9: #00d1ff;
+  --c10: #c15cff;
+  --c11: #ffe066;
+  --c12: #4ade80;
+
+  /* Le plastique du plateau. */
+  --tray: #e8443a;
+  --tray-dark: #a82419;
+  --tray-light: #ff7264;
+  --card: #fffdf8;
+  --card-edge: #e6d9c8;
+  --card-ink: #241f2e;
+
+  --ok: #2ec4b6;
+  --no: #ff5a5f;
+
+  /* Accent du prénom dans le titre. Variable dédiée et non --c2 : le jaune sert
+     aussi au bouton de sauvegarde et aux puces sélectionnées, qui ne doivent
+     pas changer de couleur avec lui. */
+  --accent-name: #4ade80;
+
+  /* Silhouettes des blocs : des rectangles sans aucune ligne droite. Le SVG est
+     étiré (preserveAspectRatio none) à la taille du bloc, d'où des coins à
+     faible emprise verticale — sinon, sur un bloc long, le coin descend
+     jusqu'au titre et le rogne. La courbure visible vient des arêtes. */
+  --blob-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M10,4 C55,1 145,0.5 190,3.5 C196,4.5 199,20 199,50 C199,80 197,95.5 190,96.5 C145,99.5 55,99 10,96 C4,95 1,80 1,50 C1,20 4,5 10,4 Z' fill='white'/%3E%3C/svg%3E");
+  --blob-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M10,3 C55,0.5 145,1 190,4 C196,5 199,22 199,52 C199,82 196,95 190,97 C145,99.5 55,99 10,95.5 C4,94.5 1,78 1,48 C1,18 4,4 10,3 Z' fill='white'/%3E%3C/svg%3E");
+
+  --font-display: 'Baloo 2', system-ui, sans-serif;
+  --font-body: 'Baloo 2', system-ui, sans-serif;
+  --display-weight: 800;
+  --display-tracking: -0.01em;
+
+  --pad: 18px;
+  --ease: cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--ink);
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+/* Décor : grosses taches floues en fond, fixes, très peu coûteuses. */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient span {
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  filter: blur(60px);
+  /* Discrètes : elles ne sont là que pour la profondeur du fond. Plus
+     lumineuses, elles noieraient les feux d'artifice. */
+  opacity: 0.2;
+  border-radius: 54% 46% 38% 62% / 49% 60% 40% 51%;
+}
+.ambient span:nth-child(1) {
+  background: var(--c5);
+  top: -18vw;
+  left: -22vw;
+}
+.ambient span:nth-child(2) {
+  background: var(--c3);
+  bottom: -25vw;
+  right: -20vw;
+}
+/* Les feux d'artifice. Le flou est ici, en une seule passe GPU, plutôt que
+   dans le dessin du canevas — et il masque au passage la basse résolution du
+   canevas (voir src/components/Fireworks.tsx). */
+.fireworks {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  filter: blur(24px);
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: max(20px, env(safe-area-inset-top)) var(--pad)
+    calc(110px + env(safe-area-inset-bottom));
+}
+
+/* Le plateau prend presque toute la largeur : chaque pixel de marge est un
+   pixel de moins sur les visages. */
+.page--board {
+  max-width: 1060px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+/* ------------------------------------------------------------------ texte */
+
+.kicker {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 8.5vw, 40px);
+  font-weight: var(--display-weight);
+  line-height: 1.02;
+  letter-spacing: var(--display-tracking);
+}
+
+.display em {
+  font-style: normal;
+  color: var(--accent-name);
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
+  margin-bottom: 4px;
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* ---------------------------------------------------------------- plateau */
+
+.board-head,
+.banner {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+.board-head.is-gone,
+.banner.is-gone {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.board-head {
+  text-align: center;
+  margin-bottom: 14px;
+}
+.board-head .display {
+  margin-bottom: 2px;
+}
+
+/* Compromis entre le bac entier et le débordement plein écran : le plateau
+   reste un objet fermé, avec ses angles et son épaisseur, mais son bord
+   latéral est réduit au strict minimum. On ne perd que 6 px de chaque côté
+   par rapport au plein écran, soit 4 px par case — invisible — alors que le
+   plateau, lui, redevient lisible comme un objet. */
+.board-frame {
+  position: relative;
+  padding: 10px 6px 14px;
+  border-radius: 18px;
+}
+
+@media (min-width: 1080px) {
+  .board-frame {
+    padding: 12px 9px 16px;
+    border-radius: 26px;
+  }
+}
+
+/* Le plastique moulé, sur son propre calque : il peut ainsi s'effacer sans
+   emporter les cartes avec lui au moment du zoom. */
+.board-plastic {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    var(--tray-light) 0%,
+    var(--tray) 38%,
+    var(--tray-dark) 100%
+  );
+  box-shadow:
+    inset 0 3px 0 rgb(255 255 255 / 0.45),
+    inset 0 -7px 0 rgb(0 0 0 / 0.3),
+    inset 4px 0 0 rgb(255 255 255 / 0.1),
+    inset -4px 0 0 rgb(0 0 0 / 0.2),
+    0 24px 48px rgb(0 0 0 / 0.55);
+  transition: opacity 0.38s ease;
+}
+.board-plastic::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    rgb(255 255 255 / 0.22) 0%,
+    rgb(255 255 255 / 0.05) 34%,
+    rgb(255 255 255 / 0) 55%
+  );
+}
+
+.board {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* Écart élargi : les cartes débordent vers le haut, il leur faut la place
+     de ne pas mordre sur la rangée du dessus. */
+  gap: 12px 6px;
+}
+
+@media (min-width: 520px) {
+  .board {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 720px) {
+  .board {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+@media (min-width: 900px) {
+  .board {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* L'alvéole creusée dans le plateau : c'est elle qu'on découvre quand la
+   carte se rabat. La perspective est posée ici pour que chaque carte pivote
+   sur son propre axe et non sur celui de la grille. */
+.slot {
+  position: relative;
+  /* Surtout pas de compensation en bas : elle rouvrirait le creux sous la
+     carte. L'alvéole raccourcit, la carte sort par le haut, point. */
+  padding: 4px;
+  border-radius: 13px;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.45), rgb(0 0 0 / 0.2));
+  box-shadow: inset 0 4px 7px rgb(0 0 0 / 0.55);
+  perspective: 700px;
+  transition: opacity 0.3s ease;
+}
+
+/* La carte : plastique clair, biseau haut clair, ombre basse.
+   Le plastique est posé sur ::before, sur son propre calque, pour qu'il puisse
+   s'effacer en laissant l'avatar : un dégradé ne s'anime pas vers « rien ». */
+.tile {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 3px 3px;
+  /* La carte est plus haute que son logement et le déborde par le haut : c'est
+     ce débordement, avec l'ombre portée vers le haut, qui la fait sortir du
+     plateau. La marge est négative pour que l'alvéole ne s'agrandisse pas avec. */
+  margin-top: -9px;
+  color: var(--card-ink);
+  transform-origin: 50% 100%;
+  transition:
+    transform 0.64s var(--ease),
+    filter 0.4s ease;
+}
+
+/* Le plastique est sur ::before, sur son propre calque, pour qu'il puisse
+   s'effacer en laissant l'avatar au moment du départ vers la page perso : un
+   dégradé ne s'anime pas vers « rien ». */
+.tile::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 10px;
+  /* Carte en aplat : le relief est porté par le filet sombre sur l'arête haute
+     et l'ombre portée vers le haut, pas par un dégradé. */
+  background: var(--card);
+  box-shadow:
+    inset 0 2px 0 rgb(0 0 0 / 0.14),
+    0 -2px 5px rgb(0 0 0 / 0.42);
+  transition: opacity 0.48s ease;
+}
+
+.tile:active {
+  transform: translateY(1px);
+}
+
+.tile-art {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  /* La forme organique : chaque case reçoit son propre --blob en inline. */
+  border-radius: var(--blob);
+  background: var(--tint);
+}
+
+/* Léger débordement : on recadre un peu sur le visage sans couper le haut du
+   crâne ni les épaules. */
+.tile-art img {
+  width: 110%;
+  height: 110%;
+  object-fit: cover;
+  display: block;
+}
+
+.tile-name {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--card-ink);
+  transition: opacity 0.3s ease;
+}
+
+/* Pastille sur les gens qui ont confirmé. */
+.tile-check {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--ok);
+  border: 2px solid var(--card);
+  border-radius: 58% 42% 45% 55% / 50% 55% 45% 50%;
+}
+
+/* L'élimination : la carte bascule vers l'avant sur sa charnière, s'assombrit
+   et laisse voir l'alvéole. Courbe accélérante, comme une chute. */
+.tile.is-down {
+  transform: rotateX(-88deg);
+  filter: brightness(0.28);
+  transition:
+    transform 0.64s cubic-bezier(0.42, 0.05, 0.7, 0.52),
+    filter 0.5s ease;
+}
+
+/* La case choisie ne bouge pas et ne grossit pas : les autres qui tombent
+   suffisent à la désigner. */
+.tile.is-chosen {
+  transform: none;
+}
+
+.slot.is-host {
+  z-index: 10;
+}
+
+/* Tout se dissout — le bac, les alvéoles, le plastique de la carte choisie et
+   son prénom — pour ne laisser que l'avatar et sa tache de couleur, qui part
+   ensuite vers la page perso. */
+.board-frame.is-leaving .board-plastic,
+.board-frame.is-leaving .slot:not(.is-host),
+.board-frame.is-leaving .tile.is-chosen::before,
+.board-frame.is-leaving .tile.is-chosen .tile-name {
+  opacity: 0;
+}
+.board-frame.is-leaving .slot.is-host {
+  background: none;
+  box-shadow: none;
+}
+.board-frame.is-leaving .slot.is-host::after {
+  opacity: 0;
+}
+
+.ghost-link {
+  display: block;
+  margin: 16px auto 0;
+  padding: 13px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--muted);
+  border: 2px dashed var(--ink-3);
+  border-radius: 32px 12px 28px 14px;
+}
+
+/* ------------------------------------------------------------------ blocs */
+
+/* Pas un rectangle : le masque SVG arrondit les quatre arêtes. Le remplissage
+   reste une couleur CSS, donc le thème continue de s'appliquer. */
+.card {
+  position: relative;
+  /* Légèrement translucide pour laisser passer la lueur des feux d'artifice.
+     Le fond du site étant plus sombre que le bloc, le contraste du texte ne
+     bouge quasiment pas. */
+  background: rgb(32 29 64 / 0.84);
+  padding: 24px 26px;
+  margin-bottom: 12px;
+  -webkit-mask-image: var(--blob-a);
+  mask-image: var(--blob-a);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.card:nth-of-type(even) {
+  -webkit-mask-image: var(--blob-b);
+  mask-image: var(--blob-b);
+}
+
+/* --------------------------------------------------------------- contrôles */
+
+.choice-row {
+  display: flex;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+/* Attention : un border-radius en % sur un élément large donne une ellipse,
+   pas une tache. Tout ce qui est plus large que haut passe donc en px, avec des
+   coins volontairement inégaux — et miroités un sur deux. */
+.choice {
+  flex: 1;
+  padding: 15px 10px;
+  font-size: 15px;
+  font-weight: 700;
+  background: var(--ink-3);
+  color: var(--paper);
+  border-radius: 28px 10px 24px 12px;
+  transition:
+    transform 0.25s var(--ease),
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.choice:nth-child(even) {
+  border-radius: 10px 28px 12px 24px;
+}
+.choice:active {
+  transform: scale(0.95);
+}
+.choice[aria-pressed='true'] {
+  background: var(--paper);
+  color: var(--ink);
+}
+.choice.yes[aria-pressed='true'] {
+  background: var(--ok);
+  color: var(--ink);
+}
+.choice.no[aria-pressed='true'] {
+  background: var(--no);
+  color: var(--paper);
+}
+.choice.maybe[aria-pressed='true'] {
+  background: var(--c2);
+  color: var(--ink);
+}
+
+/* Trois réponses côte à côte : texte plus petit et retour à la ligne autorisé. */
+.choice-row.trio {
+  gap: 6px;
+}
+.choice-row.trio .choice {
+  padding: 13px 4px;
+  font-size: 13.5px;
+  line-height: 1.15;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* Réponses centrées : quand elles ne tiennent pas toutes sur une ligne, le
+   reliquat se centre au lieu de s'aligner à gauche et de laisser un trou. */
+.chips--center {
+  justify-content: center;
+}
+
+.chip {
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--ink-3);
+  color: var(--paper);
+  border-radius: 18px 7px 16px 8px;
+  transition:
+    transform 0.2s var(--ease),
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.chip:nth-child(3n + 2) {
+  border-radius: 7px 18px 8px 16px;
+}
+.chip:nth-child(3n) {
+  border-radius: 16px 14px 6px 18px;
+}
+.chip:active {
+  transform: scale(0.93);
+}
+.chip[aria-pressed='true'] {
+  background: var(--c2);
+  color: var(--ink);
+}
+
+.field {
+  width: 100%;
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: var(--ink-3);
+  border: 2px solid transparent;
+  border-radius: 22px 8px 20px 10px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.field::placeholder {
+  color: var(--muted);
+}
+.field:focus {
+  border-color: var(--c2);
+}
+
+/* Bloc qui se déplie quand on répond oui. */
+.reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+}
+.reveal > div {
+  overflow: hidden;
+}
+.reveal.open {
+  grid-template-rows: 1fr;
+}
+
+/* ------------------------------------------------------------------- carte */
+
+.map {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 170px;
+  margin-top: 14px;
+  overflow: hidden;
+  border-radius: 30px 10px 26px 12px;
+  background: var(--ink-3);
+}
+
+/* Les tuiles OSM sont très claires : on les fond dans la palette du site. */
+.map img {
+  filter: saturate(0.55) contrast(0.9) brightness(0.72) hue-rotate(-12deg);
+}
+
+.map-pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  background: var(--c1);
+  border: 3px solid var(--paper);
+  border-radius: 58% 42% 45% 55% / 50% 55% 45% 50%;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.5);
+}
+
+.map-credit {
+  position: absolute;
+  right: 8px;
+  bottom: 6px;
+  padding: 2px 6px;
+  font-size: 9px;
+  color: var(--paper);
+  background: rgb(0 0 0 / 0.45);
+  border-radius: 6px;
+}
+
+/* --------------------------------------------------------------- musiques */
+
+.search-results {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px;
+  text-align: left;
+  background: var(--ink-3);
+  border-radius: 20px 8px 18px 8px;
+}
+
+.track img {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 55% 45% 50% 50% / 50% 50% 50% 50%;
+  background: var(--ink);
+}
+
+.track-meta {
+  min-width: 0;
+  flex: 1;
+}
+
+/* display:block est indispensable : sur un span inline, overflow et
+   text-overflow n'ont aucun effet et les longs titres débordent de la carte. */
+.track-title,
+.track-artist {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.track-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+.track-artist {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.track-action {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: var(--c2);
+  color: var(--ink);
+  border-radius: 58% 42% 45% 55% / 50% 55% 45% 50%;
+}
+.track-action.remove {
+  background: var(--ink-2);
+  color: var(--muted);
+}
+.track-action.play {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------- actions */
+
+.submit {
+  position: sticky;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  width: 100%;
+  margin-top: 20px;
+  padding: 18px;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: var(--display-weight);
+  letter-spacing: -0.01em;
+  background: var(--c2);
+  color: var(--ink);
+  border-radius: 38px 14px 34px 16px;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 0.45);
+  transition: transform 0.25s var(--ease);
+}
+.submit:active {
+  transform: scale(0.97);
+}
+/* Grisé, pas transparent : un bouton translucide laisse voir la page au
+   travers et donne l'impression d'un défaut d'affichage. */
+.submit:disabled {
+  background: var(--ink-3);
+  color: var(--muted);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.35);
+  cursor: default;
+}
+
+/* Grille plutôt que flex : les boutons restent côte à côte et de même hauteur
+   même si l'un d'eux passe sur deux lignes. */
+.btn-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+  gap: 8px;
+  margin-top: 14px;
+}
+.btn-row .link-btn {
+  margin-top: 0;
+  justify-content: center;
+  gap: 6px;
+  padding: 13px 6px;
+  font-size: 12.5px;
+  text-align: center;
+}
+
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 13px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  background: var(--ink-3);
+  color: var(--paper);
+  border-radius: 22px 8px 20px 10px;
+}
+.link-btn:nth-of-type(even) {
+  border-radius: 8px 22px 10px 20px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+}
+.back::before {
+  content: '';
+  width: 14px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+}
+
+/* Adresse copiable : c'est un bouton, mais il doit se lire comme du texte. */
+.address {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.address-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c2);
+}
+
+/* ------------------------------------------------------------------ divers */
+
+.banner {
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink);
+  background: var(--c2);
+  border-radius: 20px 8px 18px 8px;
+}
+
+/* Exactement ce qui arrive du plateau : l'avatar et sa tache de couleur, sans
+   le support en plastique. */
+.hero-avatar {
+  /* place-items comme .tile-art : l'image fait 110 % du cadre, sans centrage
+     elle déborderait uniquement à droite et en bas. */
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  flex: none;
+  /* Au-dessus des blocs : la tache les survole pendant son vol. */
+  position: relative;
+  z-index: 5;
+  overflow: hidden;
+  border-radius: var(--blob);
+  background: var(--tint);
+  /* transform-origin explicite : le calcul FLIP de GuestPage part du centre. */
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+.hero-avatar img {
+  display: block;
+  width: 110%;
+  height: 110%;
+  object-fit: cover;
+}
+
+.guest-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+/* ------------------------------------------------------------------ admin */
+
+/* Compact : les totaux servent de coup d'œil, la vraie matière est la liste
+   des réponses en dessous. */
+.mini-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.mini-stats div {
+  padding: 8px 4px;
+  text-align: center;
+  background: var(--ink-2);
+  border-radius: 14px 6px 12px 7px;
+}
+.mini-stats div:nth-child(even) {
+  border-radius: 6px 14px 7px 12px;
+}
+.mini-stats b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: var(--display-weight);
+  line-height: 1.1;
+}
+.mini-stats small {
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.t-ok { color: var(--ok); }
+.t-maybe { color: var(--c2); }
+.t-no { color: var(--no); }
+.t-muted { color: var(--muted); }
+
+/* Une réponse = un avatar + les faits qui comptent, sur deux lignes. */
+.answer {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 11px 13px;
+  margin-bottom: 7px;
+  background: rgb(32 29 64 / 0.84);
+  border-radius: 22px 9px 20px 10px;
+}
+.answer:nth-of-type(even) {
+  border-radius: 9px 22px 10px 20px;
+}
+
+.answer-avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  border-radius: var(--blob);
+  background: var(--tint);
+}
+.answer-avatar img {
+  display: block;
+  width: 110%;
+  height: 110%;
+  object-fit: cover;
+}
+.answer-avatar--ghost {
+  background: var(--ink-3);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--muted);
+  border-radius: 58% 42% 45% 55% / 50% 55% 45% 50%;
+}
+
+.answer-body { min-width: 0; flex: 1; }
+
+.answer-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.answer-head b {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: var(--display-weight);
+}
+
+.tag {
+  flex: none;
+  padding: 1px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+}
+.tag--yes { background: var(--ok); color: var(--ink); }
+.tag--maybe { background: var(--c2); color: var(--ink); }
+.tag--no { background: var(--ink-3); color: var(--muted); }
+
+/* Une pastille par choix plutôt qu'une phrase : on repère d'un coup d'œil qui
+   dort là ou qui est végétarien, sans lire chaque ligne en entier. */
+.answer-bits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.bit {
+  padding: 3px 9px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--paper);
+  background: var(--ink-3);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+/* Les deux qui engagent des achats ou du matériel ressortent. */
+.bit--bed { background: #33456e; }
+.bit--veg { background: #1f5a4e; }
+/* Les allergies ressortent : c'est la seule ligne qui peut gâcher la soirée. */
+.answer-diet {
+  margin-top: 4px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--c2);
+}
+
+.silent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 10px;
+}
+.silent-one {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.silent-one .answer-avatar {
+  width: 26px;
+  height: 26px;
+  opacity: 0.55;
+}
+
+.table {
+  width: 100%;
+  font-size: 13px;
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--ink-3);
+  white-space: nowrap;
+}
+.table th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

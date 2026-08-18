@@ -1,0 +1,71 @@
+<!doctype html>
+<!--
+  Source de l'aperçu WhatsApp / iMessage (public/og.png).
+  Pour régénérer après avoir changé le prénom ou l'âge :
+     node scripts/shot.mjs http://localhost:5173/og.html public/og.png 1200 630
+-->
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { box-sizing: border-box; margin: 0; }
+      /* Les halos débordent volontairement du cadre : sans ce clip, la capture
+         agrandit la page et l'image ne fait plus le format 1200×630 attendu. */
+      html, body { overflow: hidden; width: 1200px; height: 630px; }
+      body {
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 38px;
+        background: #151329;
+        font-family: 'Bricolage Grotesque', sans-serif;
+        color: #fff8f0;
+        overflow: hidden;
+        position: relative;
+      }
+      .glow { position: absolute; filter: blur(90px); opacity: 0.4; border-radius: 50%; }
+      .g1 { width: 520px; height: 520px; background: #9b5de5; top: -180px; left: -120px; }
+      .g2 { width: 480px; height: 480px; background: #2ec4b6; bottom: -200px; right: -100px; }
+      .kicker {
+        position: relative;
+        font-size: 24px; font-weight: 600;
+        letter-spacing: 0.3em; text-transform: uppercase; color: #a9a3c9;
+      }
+      h1 {
+        position: relative;
+        font-size: 108px; font-weight: 800; line-height: 0.92;
+        letter-spacing: -0.03em; text-align: center;
+      }
+      h1 em { font-style: normal; color: #4ade80; }
+      .sub {
+        position: relative;
+        font-size: 34px; font-weight: 600; color: #a9a3c9;
+      }
+      .row { position: relative; display: flex; gap: 20px; }
+      .row span {
+        width: 108px; height: 108px; overflow: hidden; display: block;
+        border: 4px solid #151329;
+      }
+      .row img { width: 108%; height: 108%; object-fit: cover; }
+    </style>
+  </head>
+  <body>
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+
+    <p class="kicker">Qui est-ce ?</p>
+    <h1>Anniversaire <em>Eliott</em></h1>
+    <p class="sub">Week-end du 14—15 Novembre</p>
+
+    <div class="row">
+      <span style="background:#ff5a5f;border-radius:58% 42% 45% 55%/50% 55% 45% 50%"><img src="/avatars/antonin2.svg" alt=""></span>
+      <span style="background:#5878ff;border-radius:38% 62% 55% 45%/60% 40% 60% 40%"><img src="/avatars/camille.svg" alt=""></span>
+      <span style="background:#b8e62d;border-radius:62% 38% 40% 60%/45% 62% 38% 55%"><img src="/avatars/flavie.svg" alt=""></span>
+      <span style="background:#9b5de5;border-radius:45% 55% 62% 38%/55% 45% 55% 45%"><img src="/avatars/noah.svg" alt=""></span>
+      <span style="background:#ff7bac;border-radius:55% 45% 38% 62%/40% 58% 42% 60%"><img src="/avatars/remi.svg" alt=""></span>
+      <span style="background:#ffc93c;border-radius:40% 60% 58% 42%/62% 38% 62% 38%"><img src="/avatars/violette.svg" alt=""></span>
+    </div>
+  </body>
+</html>
