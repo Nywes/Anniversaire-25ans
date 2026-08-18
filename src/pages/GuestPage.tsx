@@ -322,6 +322,9 @@ export default function GuestPage() {
       <Reveal open={comingIsh}>
         <div className="card">
           <h2 className="section-title">Tu veux ramener quelqu'un ?</h2>
+          {slug === 'louna' && (
+            <p className="hint">Paul est le bienvenu. Sowa aussi, évidemment.</p>
+          )}
           <YesNo value={rsvp.plusOne} onChange={(v) => set('plusOne', v)} />
           <Reveal open={rsvp.plusOne === true}>
             <input
