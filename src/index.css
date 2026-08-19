@@ -884,6 +884,33 @@ p {
   margin-bottom: 20px;
 }
 
+/* En-tête de la page invité : retour, prénom et avatar sur une seule ligne,
+   collée en haut plutôt que centrée dans un grand bloc. */
+.guest-head--nav {
+  gap: 12px;
+  margin-top: 2px;
+  margin-bottom: 22px;
+}
+.guest-head--nav .back {
+  margin: 0;
+  flex: none;
+}
+.guest-head--nav .guest-name {
+  flex: 1;
+  /* Sans min-width:0, un flex-item ne rétrécit jamais sous sa taille de
+     contenu — l'ellipsis n'aurait alors aucun effet sur un prénom long. */
+  min-width: 0;
+  text-align: center;
+  font-size: 21px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.guest-head--nav .hero-avatar {
+  width: 60px;
+  height: 60px;
+}
+
 /* ------------------------------------------------------------------ admin */
 
 /* Compact : les totaux servent de coup d'œil, la vraie matière est la liste

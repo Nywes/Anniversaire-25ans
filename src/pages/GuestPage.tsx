@@ -237,15 +237,12 @@ export default function GuestPage() {
 
   return (
     <main className="page">
-      <Link className="back" to="/" aria-label="Retour au plateau">
-        <Icon name="back" size={20} />
-      </Link>
-
-      <header className="guest-head">
+      <header className="guest-head guest-head--nav">
+        <Link className="back" to="/" aria-label="Retour au plateau">
+          <Icon name="back" size={20} />
+        </Link>
+        <h1 className="section-title guest-name">{effectiveName || 'toi'}</h1>
         {hero}
-        <h1 className="section-title" style={{ fontSize: 30 }}>
-          {effectiveName || 'toi'}
-        </h1>
       </header>
 
       {isGhost && (
@@ -322,9 +319,6 @@ export default function GuestPage() {
       <Reveal open={comingIsh}>
         <div className="card">
           <h2 className="section-title">Tu veux ramener quelqu'un ?</h2>
-          {slug === 'louna' && (
-            <p className="hint">Paul est le bienvenu. Sowa aussi, évidemment.</p>
-          )}
           <YesNo value={rsvp.plusOne} onChange={(v) => set('plusOne', v)} />
           <Reveal open={rsvp.plusOne === true}>
             <input
