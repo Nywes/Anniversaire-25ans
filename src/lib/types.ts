@@ -29,6 +29,8 @@ export type Rsvp = {
   slug: string
   name: string
   attending: Attending
+  /** Note libre quand attending vaut 'peut-etre' — pourquoi ce n'est pas encore sûr. */
+  maybeNote: string
   /**
    * Les oui/non sont eux aussi à trois états : avec un simple booléen, `false`
    * allumerait le bouton « Non » dès l'ouverture et on enregistrerait des
@@ -48,6 +50,7 @@ export const emptyRsvp = (slug: string, name: string): Rsvp => ({
   slug,
   name,
   attending: null,
+  maybeNote: '',
   plusOne: null,
   plusOneName: '',
   sleepover: null,

@@ -605,6 +605,16 @@ p {
   border-color: var(--c2);
 }
 
+textarea.field {
+  resize: none;
+  font-family: inherit;
+  line-height: 1.4;
+}
+/* Deux lignes de haut, pas la grande zone de texte d'un message libre. */
+textarea.field.field--sm {
+  min-height: 0;
+}
+
 /* Bloc qui se déplie quand on répond oui. */
 .reveal {
   display: grid;
@@ -1034,6 +1044,16 @@ p {
   font-size: 12.5px;
   line-height: 1.35;
   color: var(--c2);
+}
+
+/* La note du « peut-être » : une citation, pas une alerte — d'où le muted
+   plutôt que la couleur d'accent réservée aux allergies. */
+.answer-note {
+  margin-top: 4px;
+  font-size: 12.5px;
+  font-style: italic;
+  line-height: 1.35;
+  color: var(--muted);
 }
 
 .silent {

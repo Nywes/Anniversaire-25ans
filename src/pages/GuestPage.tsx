@@ -314,6 +314,16 @@ export default function GuestPage() {
             Je peux pas
           </button>
         </div>
+
+        <Reveal open={rsvp.attending === 'peut-etre'}>
+          <textarea
+            className="field field--sm"
+            rows={2}
+            value={rsvp.maybeNote}
+            onChange={(e) => set('maybeNote', e.target.value)}
+            placeholder="..."
+          />
+        </Reveal>
       </div>
 
       <Reveal open={comingIsh}>

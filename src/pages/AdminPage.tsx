@@ -201,6 +201,9 @@ export default function AdminPage() {
                   ))}
                 </div>
               )}
+              {r.attending === 'peut-etre' && r.maybeNote.trim() && (
+                <p className="answer-note">« {r.maybeNote} »</p>
+              )}
               {r.dietNotes.trim() && <p className="answer-diet">{r.dietNotes}</p>}
             </div>
           </div>

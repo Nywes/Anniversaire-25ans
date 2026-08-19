@@ -10,6 +10,7 @@ type RsvpRow = {
   slug: string
   name: string
   attending: Attending
+  maybe_note: string
   plus_one: boolean | null
   plus_one_name: string
   sleepover: boolean | null
@@ -24,6 +25,7 @@ const toRsvp = (r: RsvpRow): Rsvp => ({
   slug: r.slug,
   name: r.name,
   attending: r.attending,
+  maybeNote: r.maybe_note ?? '',
   plusOne: r.plus_one,
   plusOneName: r.plus_one_name ?? '',
   sleepover: r.sleepover,
@@ -38,6 +40,7 @@ const toRow = (r: Rsvp): RsvpRow => ({
   slug: r.slug,
   name: r.name,
   attending: r.attending,
+  maybe_note: r.maybeNote,
   plus_one: r.plusOne,
   plus_one_name: r.plusOneName,
   sleepover: r.sleepover,

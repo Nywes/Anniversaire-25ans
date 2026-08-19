@@ -8,6 +8,8 @@ create table if not exists rsvps (
   name            text not null,
   -- null = « pas répondu », ce qui n'est pas la même chose que « non ».
   attending       text check (attending in ('oui', 'non', 'peut-etre')),
+  -- Pourquoi ce n'est pas encore sûr, rempli seulement si attending = 'peut-etre'.
+  maybe_note      text    not null default '',
   plus_one        boolean,
   plus_one_name   text    not null default '',
   sleepover       boolean,
@@ -18,6 +20,11 @@ create table if not exists rsvps (
   drinks          text[]  not null default '{}',
   updated_at      timestamptz not null default now()
 );
+
+-- Migration pour un projet déjà créé avant l'ajout de ce champ : le create
+-- table ci-dessus ne touche pas une table existante, donc on l'ajoute ici
+-- explicitement. Sans effet si la colonne est déjà là.
+alter table rsvps add column if not exists maybe_note text not null default '';
 
 -- ----------------------------------------------------------------- playlist
 
