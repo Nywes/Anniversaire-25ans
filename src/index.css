@@ -901,7 +901,7 @@ p {
      contenu — l'ellipsis n'aurait alors aucun effet sur un prénom long. */
   min-width: 0;
   text-align: center;
-  font-size: 21px;
+  font-size: 30px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
