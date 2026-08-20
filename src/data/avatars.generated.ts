@@ -29,12 +29,28 @@ export const AVATARS: Avatar[] = [
     "name": "Jade"
   },
   {
+    "slug": "lea",
+    "name": "Lea"
+  },
+  {
     "slug": "lily",
     "name": "Lily"
   },
   {
+    "slug": "loick",
+    "name": "Loick"
+  },
+  {
     "slug": "louna",
     "name": "Louna"
+  },
+  {
+    "slug": "lucie",
+    "name": "Lucie"
+  },
+  {
+    "slug": "lucile",
+    "name": "Lucile"
   },
   {
     "slug": "mae",
@@ -47,6 +63,10 @@ export const AVATARS: Avatar[] = [
   {
     "slug": "matisse",
     "name": "Matisse"
+  },
+  {
+    "slug": "nathan",
+    "name": "Nathan"
   },
   {
     "slug": "nell",
