@@ -63,7 +63,7 @@ function jsonp<T>(url: string, timeoutMs = 8000): Promise<T> {
   })
 }
 
-export async function searchTracks(term: string, limit = 12): Promise<Track[]> {
+export async function searchTracks(term: string, limit = 10): Promise<Track[]> {
   const q = term.trim()
   if (q.length < 2) return []
 

@@ -209,9 +209,6 @@ export default function MusicPicker({ guestSlug, guestName }: Props) {
                 <span className="track-title">{t.title}</span>
                 <span className="track-artist">{t.artist}</span>
               </span>
-              <span className="track-action" aria-hidden="true">
-                <Icon name="plus" size={16} />
-              </span>
             </div>
           ))}
         </div>
