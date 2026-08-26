@@ -19,6 +19,7 @@ type RsvpRow = {
   diet_notes: string
   drinks_alcohol: boolean | null
   drinks: DrinkId[]
+  message: string
 }
 
 const toRsvp = (r: RsvpRow): Rsvp => ({
@@ -34,6 +35,7 @@ const toRsvp = (r: RsvpRow): Rsvp => ({
   dietNotes: r.diet_notes ?? '',
   drinksAlcohol: r.drinks_alcohol,
   drinks: r.drinks ?? [],
+  message: r.message ?? '',
 })
 
 const toRow = (r: Rsvp): RsvpRow => ({
@@ -49,6 +51,7 @@ const toRow = (r: Rsvp): RsvpRow => ({
   diet_notes: r.dietNotes,
   drinks_alcohol: r.drinksAlcohol,
   drinks: r.drinks,
+  message: r.message,
 })
 
 export async function loadRsvp(slug: string): Promise<Rsvp | null> {

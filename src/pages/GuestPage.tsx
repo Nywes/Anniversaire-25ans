@@ -362,7 +362,7 @@ export default function GuestPage() {
               ))}
             </div>
             <Reveal open={rsvp.sleepGear === 'lit'}>
-              <p className="hint" style={{ marginTop: 10 }}>
+              <p className="hint" style={{ marginTop: 10, flex: 1, textAlign: 'center' }}>
                 Ce sera étudié dans la limite des stocks disponibles.
               </p>
             </Reveal>
@@ -404,6 +404,17 @@ export default function GuestPage() {
         </div>
 
         {ready && <MusicPicker guestSlug={effectiveSlug} guestName={effectiveName} />}
+
+        <div className="card">
+          <h2 className="section-title">Un petit mot ?</h2>
+          <textarea
+            className="field"
+            rows={3}
+            value={rsvp.message}
+            onChange={(e) => set('message', e.target.value)}
+            placeholder="Si tu veux me laisser un message, c'est ici."
+          />
+        </div>
       </Reveal>
 
       {error && (

@@ -18,13 +18,16 @@ create table if not exists rsvps (
   diet_notes      text    not null default '',
   drinks_alcohol  boolean,
   drinks          text[]  not null default '{}',
+  -- Mot libre laissé à l'hôte, après le choix des musiques.
+  message         text    not null default '',
   updated_at      timestamptz not null default now()
 );
 
--- Migration pour un projet déjà créé avant l'ajout de ce champ : le create
--- table ci-dessus ne touche pas une table existante, donc on l'ajoute ici
+-- Migrations pour un projet déjà créé avant l'ajout de ces champs : le create
+-- table ci-dessus ne touche pas une table existante, donc on les ajoute ici
 -- explicitement. Sans effet si la colonne est déjà là.
 alter table rsvps add column if not exists maybe_note text not null default '';
+alter table rsvps add column if not exists message    text not null default '';
 
 -- ----------------------------------------------------------------- playlist
 

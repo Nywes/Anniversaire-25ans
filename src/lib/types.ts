@@ -44,6 +44,8 @@ export type Rsvp = {
   dietNotes: string
   drinksAlcohol: boolean | null
   drinks: DrinkId[]
+  /** Mot libre laissé à l'hôte, après le choix des musiques. */
+  message: string
 }
 
 export const emptyRsvp = (slug: string, name: string): Rsvp => ({
@@ -59,6 +61,7 @@ export const emptyRsvp = (slug: string, name: string): Rsvp => ({
   dietNotes: '',
   drinksAlcohol: null,
   drinks: [],
+  message: '',
 })
 
 export type SavedTrack = {

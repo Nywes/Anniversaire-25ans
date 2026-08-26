@@ -205,6 +205,7 @@ export default function AdminPage() {
                 <p className="answer-note">« {r.maybeNote} »</p>
               )}
               {r.dietNotes.trim() && <p className="answer-diet">{r.dietNotes}</p>}
+              {r.message.trim() && <p className="answer-note">« {r.message} »</p>}
             </div>
           </div>
         )
