@@ -9,6 +9,10 @@ export const AVATARS: Avatar[] = [
     "name": "Antonin"
   },
   {
+    "slug": "arthur",
+    "name": "Arthur"
+  },
+  {
     "slug": "camille",
     "name": "Camille"
   },
@@ -39,6 +43,10 @@ export const AVATARS: Avatar[] = [
   {
     "slug": "loick",
     "name": "Loick"
+  },
+  {
+    "slug": "lou",
+    "name": "Lou"
   },
   {
     "slug": "louna",
@@ -85,6 +93,10 @@ export const AVATARS: Avatar[] = [
     "name": "Pablo"
   },
   {
+    "slug": "pak-ho",
+    "name": "Pak Ho"
+  },
+  {
     "slug": "pinsio",
     "name": "Pinsio"
   },
@@ -109,11 +121,19 @@ export const AVATARS: Avatar[] = [
     "name": "Toni"
   },
   {
+    "slug": "tristan",
+    "name": "Tristan"
+  },
+  {
     "slug": "victor",
     "name": "Victor"
   },
   {
     "slug": "violette",
     "name": "Violette"
+  },
+  {
+    "slug": "winnie",
+    "name": "Winnie"
   }
 ]
