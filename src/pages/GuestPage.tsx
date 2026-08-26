@@ -321,7 +321,7 @@ export default function GuestPage() {
             rows={2}
             value={rsvp.maybeNote}
             onChange={(e) => set('maybeNote', e.target.value)}
-            placeholder="..."
+            placeholder="Comment ça peut-être ?"
           />
         </Reveal>
       </div>
