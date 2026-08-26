@@ -53,11 +53,16 @@
   --accent-name: #4ade80;
 
   /* Silhouettes des blocs : des rectangles sans aucune ligne droite. Le SVG est
-     étiré (preserveAspectRatio none) à la taille du bloc, d'où des coins à
-     faible emprise verticale — sinon, sur un bloc long, le coin descend
-     jusqu'au titre et le rogne. La courbure visible vient des arêtes. */
-  --blob-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M10,4 C55,1 145,0.5 190,3.5 C196,4.5 199,20 199,50 C199,80 197,95.5 190,96.5 C145,99.5 55,99 10,96 C4,95 1,80 1,50 C1,20 4,5 10,4 Z' fill='white'/%3E%3C/svg%3E");
-  --blob-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M10,3 C55,0.5 145,1 190,4 C196,5 199,22 199,52 C199,82 196,95 190,97 C145,99.5 55,99 10,95.5 C4,94.5 1,78 1,48 C1,18 4,4 10,3 Z' fill='white'/%3E%3C/svg%3E");
+     étiré (preserveAspectRatio none) à la taille du bloc, ce qui pose un piège :
+     l'échancrure des coins est un pourcentage de la hauteur, donc sur un bloc
+     qui grandit beaucoup (la playlist quand des résultats de recherche
+     apparaissent), la même échancrure devient bien plus large en pixels réels
+     et finit par mordre sur le padding et le titre. D'où une emprise verticale
+     volontairement minuscule (~1 % au lieu de ~4 %) : même un bloc de 900px de
+     haut ne mord alors que 10-15px, bien en dessous des 24px de padding. La
+     courbure visible vient des arêtes, pas des coins. */
+  --blob-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M10,1.3 C55,0.3 145,0.2 190,1.2 C196,1.5 199,20 199,50 C199,80 197,98.5 190,98.8 C145,99.8 55,99.7 10,98.7 C4,98.3 1,80 1,50 C1,20 4,1.7 10,1.3 Z' fill='white'/%3E%3C/svg%3E");
+  --blob-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100' preserveAspectRatio='none'%3E%3Cpath d='M10,1 C55,0.2 145,0.3 190,1.3 C196,1.7 199,22 199,52 C199,82 196,98.3 190,99 C145,99.8 55,99.7 10,98.5 C4,98.2 1,78 1,48 C1,18 4,1.3 10,1 Z' fill='white'/%3E%3C/svg%3E");
 
   --font-display: 'Baloo 2', system-ui, sans-serif;
   --font-body: 'Baloo 2', system-ui, sans-serif;
@@ -714,14 +719,16 @@ textarea.field.field--sm {
 }
 
 /* La pochette : un vrai bouton, avec un repère lecture/pause toujours visible
-   par-dessus (pas seulement au survol, qui n'existe pas au doigt). */
+   par-dessus (pas seulement au survol, qui n'existe pas au doigt). Forme tirée
+   du trackId (subtleBlobFor) : organique comme les avatars du plateau, mais
+   dans une plage resserrée pour rester discrète sur une petite vignette. */
 .track-photo {
   position: relative;
   flex: none;
   width: 46px;
   height: 46px;
   padding: 0;
-  border-radius: 55% 45% 50% 50% / 50% 50% 50% 50%;
+  border-radius: var(--blob);
   overflow: hidden;
 }
 .track-photo img {

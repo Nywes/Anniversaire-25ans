@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { searchTracks, type Track } from '../lib/itunes'
 import { addTrack, loadTracks, removeTrack } from '../lib/store'
 import { MAX_TRACKS, type SavedTrack } from '../lib/types'
+import { subtleBlobFor } from '../lib/blob'
 import Icon from './Icon'
 
 type Props = { guestSlug: string; guestName: string }
@@ -122,6 +123,7 @@ export default function MusicPicker({ guestSlug, guestName }: Props) {
             <div className="track" key={t.id}>
               <button
                 className="track-photo"
+                style={{ '--blob': subtleBlobFor(String(t.trackId)) } as React.CSSProperties}
                 onClick={() => preview(t)}
                 aria-label={playing === t.trackId ? `Mettre en pause ${t.title}` : `Écouter ${t.title}`}
               >
@@ -196,6 +198,7 @@ export default function MusicPicker({ guestSlug, guestName }: Props) {
             >
               <button
                 className="track-photo"
+                style={{ '--blob': subtleBlobFor(String(t.trackId)) } as React.CSSProperties}
                 onClick={(e) => {
                   e.stopPropagation()
                   preview(t)

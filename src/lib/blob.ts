@@ -37,6 +37,19 @@ export const blobFor = (slug: string) => {
   return `${v()}% ${v()}% ${v()}% ${v()}% / ` + `${v()}% ${v()}% ${v()}% ${v()}%`
 }
 
+/**
+ * Variante plus sage, pour les pochettes d'album : reconnaissable comme
+ * « pas un cercle », mais sans l'exubérance des avatars du plateau. Plage
+ * resserrée autour de 50 % (38–62 plutôt que 30–70) — huit valeurs tirées
+ * indépendamment tombent presque toujours assez loin les unes des autres
+ * pour ne jamais se lire comme une forme symétrique.
+ */
+export const subtleBlobFor = (seed: string) => {
+  const next = rng(hash(seed) || 1)
+  const v = () => Math.round(38 + next() * 24)
+  return `${v()}% ${v()}% ${v()}% ${v()}% / ` + `${v()}% ${v()}% ${v()}% ${v()}%`
+}
+
 /** Style prêt à poser sur un élément qui utilise --blob / --tint. */
 export const blobStyle = (slug: string) =>
   ({ '--blob': blobFor(slug), '--tint': tintFor(slug) }) as CSSProperties
