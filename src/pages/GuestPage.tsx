@@ -361,6 +361,11 @@ export default function GuestPage() {
                 </button>
               ))}
             </div>
+            <Reveal open={rsvp.sleepGear === 'lit'}>
+              <p className="hint" style={{ marginTop: 10 }}>
+                Ce sera étudié dans la limite des stocks disponibles.
+              </p>
+            </Reveal>
           </Reveal>
         </div>
 
