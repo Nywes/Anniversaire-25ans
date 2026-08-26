@@ -6,6 +6,26 @@ import Icon from './Icon'
 
 type Props = { guestSlug: string; guestName: string }
 
+/**
+ * Glyphe lecture/pause posé sur la pochette. Contrairement aux icônes de
+ * Icon.tsx (au trait, fill="none"), celui-ci est plein : sur la vignette d'une
+ * pochette chargée, un simple contour se perd, alors qu'un pastille sombre +
+ * triangle plein reste lisible à 44 px sur n'importe quelle image.
+ */
+function PlayGlyph({ playing }: { playing: boolean }) {
+  return (
+    <span className="track-play" aria-hidden="true">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+        {playing ? (
+          <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
+        ) : (
+          <path d="M8 5.5v13l11-6.5z" />
+        )}
+      </svg>
+    </span>
+  )
+}
+
 export default function MusicPicker({ guestSlug, guestName }: Props) {
   const [term, setTerm] = useState('')
   const [results, setResults] = useState<Track[]>([])
@@ -101,11 +121,12 @@ export default function MusicPicker({ guestSlug, guestName }: Props) {
           {mine.map((t) => (
             <div className="track" key={t.id}>
               <button
+                className="track-photo"
                 onClick={() => preview(t)}
-                aria-label={`Écouter ${t.title}`}
-                style={{ padding: 0, lineHeight: 0 }}
+                aria-label={playing === t.trackId ? `Mettre en pause ${t.title}` : `Écouter ${t.title}`}
               >
                 <img src={t.artwork} alt="" />
+                <PlayGlyph playing={playing === t.trackId} />
               </button>
               <span className="track-meta">
                 <span className="track-title">{t.title}</span>
@@ -154,25 +175,43 @@ export default function MusicPicker({ guestSlug, guestName }: Props) {
       {results.length > 0 && (
         <div className="search-results">
           {results.map((t) => (
-            <div className="track" key={t.trackId}>
+            // Toute la ligne ajoute le morceau : un bouton « + » minuscule au
+            // bout était trop facile à rater. La pochette reste un vrai
+            // <button> imbriqué pour l'écoute (un <div role="button"> autour
+            // plutôt qu'un <button> autour évite d'imbriquer deux boutons,
+            // ce que les navigateurs gèrent mal), avec stopPropagation pour
+            // ne pas déclencher l'ajout en même temps.
+            <div
+              className="track track--pick"
+              key={t.trackId}
+              role="button"
+              tabIndex={0}
+              onClick={() => add(t)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  add(t)
+                }
+              }}
+            >
               <button
-                onClick={() => preview(t)}
-                aria-label={`Écouter ${t.title}`}
-                style={{ padding: 0, lineHeight: 0 }}
+                className="track-photo"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  preview(t)
+                }}
+                aria-label={playing === t.trackId ? `Mettre en pause ${t.title}` : `Écouter ${t.title}`}
               >
                 <img src={t.artwork} alt="" />
+                <PlayGlyph playing={playing === t.trackId} />
               </button>
               <span className="track-meta">
                 <span className="track-title">{t.title}</span>
                 <span className="track-artist">{t.artist}</span>
               </span>
-              <button
-                className="track-action"
-                onClick={() => add(t)}
-                aria-label={`Ajouter ${t.title}`}
-              >
+              <span className="track-action" aria-hidden="true">
                 <Icon name="plus" size={16} />
-              </button>
+              </span>
             </div>
           ))}
         </div>
