@@ -33,6 +33,10 @@ export const AVATARS: Avatar[] = [
     "name": "Flavie"
   },
   {
+    "slug": "henry",
+    "name": "Henry"
+  },
+  {
     "slug": "jade",
     "name": "Jade"
   },
